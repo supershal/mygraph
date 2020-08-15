@@ -1,0 +1,52 @@
+syntax = "proto3";
+
+package proto;
+
+import "google/protobuf/empty.proto";
+
+message Graph {
+    map<int64, Node> nodes = 1;
+}
+
+message Node {
+    int64 id = 1;
+    map<int64, bool> neighbors = 2;
+    // more fields here
+}
+
+
+message AddGraphRequest {
+    Graph graph = 1;
+}
+
+message AddGraphResponse {
+    int64 graphId = 1;
+}
+
+message DeleteGraphRequest {
+    int64 graphId = 1;
+}
+
+message ShortestPathRequest{
+    int64 graphId = 1;
+    int64 sourceNodeId = 2;
+    int64 destNodeId = 3;
+}
+
+message ShortestPathResponse{
+    int64 distance = 1;
+}
+
+/*
+NetworkService is proto defination for network service that provides various operations on graph
+*/
+service NetworkService{
+    rpc AddGraph(AddGraphRequest) returns (AddGraphResponse) {};
+    rpc DeleteGraph(DeleteGraphRequest) returns (google.protobuf.Empty) {};
+    rpc ShortestPath(ShortestPathRequest) returns (ShortestPathResponse) {};
+}
+
+
+
+
+
