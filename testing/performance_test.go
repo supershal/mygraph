@@ -30,6 +30,7 @@ func TestDeleteGraph_1000(t *testing.T) {
 	assert.Equal(t, len(ids), 1000, "Graph service should return 1000 graphs")
 	deleteGraphParallel(ids)
 }
+
 func sendGraphParallel(g *graph.Undirected, times int) []int64 {
 	var wg sync.WaitGroup
 	var m sync.Mutex
