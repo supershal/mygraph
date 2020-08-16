@@ -13,6 +13,7 @@ import (
 	"google.golang.org/grpc"
 )
 
+// GraphServer test graphsever
 func GraphServer(serverAddr string) *grpc.Server {
 	lis, err := net.Listen("tcp", serverAddr)
 	if err != nil {
@@ -28,6 +29,7 @@ func GraphServer(serverAddr string) *grpc.Server {
 	return g
 }
 
+// NewClientConnection new client connection
 func NewClientConnection(serverAddr string) (*grpc.ClientConn, pb.NetworkServiceClient) {
 	opts := []grpc.DialOption{grpc.WithBlock(), grpc.WithInsecure()}
 	conn, err := grpc.Dial(serverAddr, opts...)
@@ -37,6 +39,7 @@ func NewClientConnection(serverAddr string) (*grpc.ClientConn, pb.NetworkService
 	return conn, pb.NewNetworkServiceClient(conn)
 }
 
+// SampleGraph returns smaple hardcoded graph
 func SampleGraph() *graph.Undirected {
 	g := graph.NewUndirectedGraph()
 	nodes := make([]*pb.Node, 0)
@@ -80,7 +83,7 @@ func DeleteGraph(client pb.NetworkServiceClient, id int64) error {
 	return err
 }
 
-// shortestPath returns shortest path between two nodes in a graph
+// ShortestPath returns shortest path between two nodes in a graph
 func ShortestPath(client pb.NetworkServiceClient, id, srcid, dstid int64) (int64, error) {
 	ctx, cancel := context.WithTimeout(context.Background(), 3*time.Second)
 

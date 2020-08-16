@@ -3,9 +3,9 @@ package graph_test
 import (
 	"testing"
 
+	"github.com/stretchr/testify/assert"
 	"github.com/supershal/mygraph/graph"
 	pb "github.com/supershal/mygraph/proto"
-	"github.com/stretchr/testify/assert"
 )
 
 func TestAddNode(t *testing.T) {

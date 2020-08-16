@@ -1,17 +1,29 @@
-package testing
+package performance
 
 import (
 	"fmt"
 	"log"
+	"os"
 	"sync"
 	"testing"
 
 	"github.com/stretchr/testify/assert"
 	"github.com/supershal/mygraph/graph"
+	helper "github.com/supershal/mygraph/testing"
 )
 
+var perfServerAddr string = "localhost:8081"
+
+// TestMain intitalizes grpc server
+func TestMain(m *testing.M) {
+	go func() {
+		g := helper.GraphServer(perfServerAddr)
+		defer g.Stop()
+	}()
+	os.Exit(m.Run())
+}
 func TestAddGraph_1000(t *testing.T) {
-	g := SampleGraph()
+	g := helper.SampleGraph()
 	ids := sendGraphParallel(g, 1000)
 	assert.Equal(t, len(ids), 1000, "Graph service should return 1000 graphs")
 	graphs := map[int64]bool{}
@@ -25,7 +37,7 @@ func TestAddGraph_1000(t *testing.T) {
 }
 
 func TestDeleteGraph_1000(t *testing.T) {
-	g := SampleGraph()
+	g := helper.SampleGraph()
 	ids := sendGraphParallel(g, 1000)
 	assert.Equal(t, len(ids), 1000, "Graph service should return 1000 graphs")
 	deleteGraphParallel(ids)
@@ -39,12 +51,12 @@ func sendGraphParallel(g *graph.Undirected, times int) []int64 {
 	sendGraph := func() int64 {
 		defer wg.Done()
 		// Create new connection for each operation
-		conn, client := NewClientConnection(funcServerAddr)
+		conn, client := helper.NewClientConnection(perfServerAddr)
 		defer conn.Close()
 		var id int64
 		var err error
 		//fmt.Println("Adding Graph with ID", i)
-		if id, err = AddGraph(client, g.GetGraph()); err != nil {
+		if id, err = helper.AddGraph(client, g.GetGraph()); err != nil {
 			log.Fatalln(err)
 		}
 		log.Println("graph generated:", id)
@@ -68,10 +80,10 @@ func deleteGraphParallel(ids []int64) {
 		defer wg.Done()
 
 		// Create new connection for each operation
-		conn, client := NewClientConnection(funcServerAddr)
+		conn, client := helper.NewClientConnection(perfServerAddr)
 		defer conn.Close()
 		var err error
-		if err = DeleteGraph(client, id); err != nil {
+		if err = helper.DeleteGraph(client, id); err != nil {
 			log.Fatalln(err)
 		}
 		log.Println("graph Deleted:", id)

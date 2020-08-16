@@ -14,11 +14,11 @@ GOARCH?=amd64
 .PHONY: test build install lint setup clean all
 default: all
 
-all: setup deps fmt lint vet test install
+all: setup deps fmt lint vet test bin
 
-setup: $(GOPATH)/bin/golint
+setup: ${GOPATH}/bin/golint
 	
-$(GOPATH)/bin/golint:
+${GOPATH}/bin/golint:
 	go get -u golang.org/x/lint/golint
 
 deps:
@@ -35,12 +35,12 @@ build:
 
 bin:
 	@echo "building and installing..."
-	GOOS=${GOOS} GOARCH=${GOARCH} CGO_ENABLED=0 go build --installsuffix cgo  -o ${SERVER_BINARY} ${MAIN_GO_SERVER}
-	GOOS=${GOOS} GOARCH=${GOARCH} CGO_ENABLED=0 go build --installsuffix cgo  -o ${CLIENT_BINARY} ${MAIN_GO_CLIENT}
+	@GOOS=${GOOS} GOARCH=${GOARCH} CGO_ENABLED=0 go build --installsuffix cgo  -o ${SERVER_BINARY} ${MAIN_GO_SERVER}
+	@GOOS=${GOOS} GOARCH=${GOARCH} CGO_ENABLED=0 go build --installsuffix cgo  -o ${CLIENT_BINARY} ${MAIN_GO_CLIENT}
 
 lint:
 	@echo "linting..."
-	@golint ${PACKAGES}
+	@${GOPATH}/bin/golint ${PACKAGES}
 
 
 clean:

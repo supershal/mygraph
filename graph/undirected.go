@@ -7,11 +7,13 @@ import (
 	pb "github.com/supershal/mygraph/proto"
 )
 
+// Undirected graph
 type Undirected struct {
 	graph *pb.Graph
 	m     sync.RWMutex
 }
 
+//NewUndirectedGraph creates empty graph
 func NewUndirectedGraph() *Undirected {
 	return &Undirected{
 		graph: &pb.Graph{
@@ -20,15 +22,19 @@ func NewUndirectedGraph() *Undirected {
 	}
 }
 
+// MakeUndirectedGraph from existing graph
 func MakeUndirectedGraph(g *pb.Graph) *Undirected {
 	return &Undirected{
 		graph: g,
 	}
 }
 
+// GetGraph retrieve underlaying graph
 func (u *Undirected) GetGraph() *pb.Graph {
 	return u.graph
 }
+
+//AddNode add a node in graph
 func (u *Undirected) AddNode(id int64) *pb.Node {
 	if n, ok := u.graph.Nodes[id]; ok && n != nil {
 		return n
@@ -43,6 +49,7 @@ func (u *Undirected) AddNode(id int64) *pb.Node {
 	return n
 }
 
+// AddEdge connects two nodes in a graph
 func (u *Undirected) AddEdge(src, dst *pb.Node) error {
 	var ok bool
 	if _, ok = u.graph.Nodes[src.Id]; !ok {
@@ -63,6 +70,7 @@ func (u *Undirected) AddEdge(src, dst *pb.Node) error {
 	return nil
 }
 
+// String print graph
 func (u *Undirected) String() string {
 	graph := u.graph
 	graphStr := ""
