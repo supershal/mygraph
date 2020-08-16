@@ -1,9 +1,5 @@
 package service
 
-// type NetworkServiceServer interface {
-// 	AddCluster(context.Context, *AddClusterRequest) (*AddClusterResponse, error)
-// }
-
 import (
 	"context"
 	"fmt"
@@ -11,7 +7,7 @@ import (
 	"sync"
 
 	empty "github.com/golang/protobuf/ptypes/empty"
-	pb "github.com/mygraph/proto"
+	pb "github.com/supershal/mygraph/proto"
 )
 
 // GraphStore stores graphs
@@ -60,6 +56,7 @@ func (s *GraphStore) DeleteGraph(ctx context.Context, req *pb.DeleteGraphRequest
 // ShortestPath returns shortest path between two nodes if it exists
 func (s *GraphStore) ShortestPath(ctx context.Context, req *pb.ShortestPathRequest) (*pb.ShortestPathResponse, error) {
 	s.m.RLock()
+	defer s.m.RUnlock()
 	graphID := req.GraphId
 	graph, ok := s.graphs[graphID]
 	if !ok {
@@ -99,6 +96,6 @@ func (s *GraphStore) ShortestPath(ctx context.Context, req *pb.ShortestPathReque
 		p = parents[p]
 		path++
 	}
-	s.m.RUnlock()
+
 	return &pb.ShortestPathResponse{Distance: path}, nil
 }

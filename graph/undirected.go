@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"sync"
 
-	pb "github.com/mygraph/proto"
+	pb "github.com/supershal/mygraph/proto"
 )
 
 type Undirected struct {
@@ -63,14 +63,16 @@ func (u *Undirected) AddEdge(src, dst *pb.Node) error {
 	return nil
 }
 
-func (u *Undirected) String() {
+func (u *Undirected) String() string {
 	graph := u.graph
+	graphStr := ""
 	for id, node := range graph.Nodes {
-		fmt.Printf("%v->", id)
+		graphStr += fmt.Sprintf("%v->", id)
 		for n := range node.Neighbors {
-			fmt.Printf("%v,", n)
+			graphStr += fmt.Sprintf("%v,", n)
 		}
-		fmt.Println()
+		graphStr += fmt.Sprintf("\n")
 	}
+	return graphStr
 
 }

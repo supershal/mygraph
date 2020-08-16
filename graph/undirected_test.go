@@ -3,8 +3,8 @@ package graph_test
 import (
 	"testing"
 
-	"github.com/mygraph/graph"
-	pb "github.com/mygraph/proto"
+	"github.com/supershal/mygraph/graph"
+	pb "github.com/supershal/mygraph/proto"
 	"github.com/stretchr/testify/assert"
 )
 

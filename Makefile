@@ -22,7 +22,6 @@ $(GOPATH)/bin/golint:
 	go get -u golang.org/x/lint/golint
 
 deps:
-	go clean -modcache
 	go mod download
 	go mod vendor -v
 
